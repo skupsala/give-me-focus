@@ -159,7 +159,7 @@ input, select, textarea {
 
 		a:hover {
 			border-bottom-color: transparent;
-		}
+		}z
 
 	strong, b {
 		color: #ffffff;
@@ -1635,4 +1635,14 @@ input, select, textarea {
 
 		body.is-preload #footer {
 			opacity: 0;
+		}
+
+		/* Customer additions */
+		a.active {
+			background-color: rgba(255, 255, 255, 0.075);
+		}
+
+		#timer {
+			margin: 0 auto 1rem auto;
+			font-size: 3rem;
 		}
