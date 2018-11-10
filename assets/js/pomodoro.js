@@ -31,6 +31,7 @@
   var _focusTextElem = document.getElementById('focus-text');
   var _startButton = document.getElementById('start');
   var _stopButton = document.getElementById('stop');
+  var _resetButton = document.getElementById('reset');
 
   function formatTimer(milliseconds) {
     var remainingSeconds = Math.round(milliseconds / 1000);
@@ -40,7 +41,8 @@
   }
 
   function startTimer() {
-    _startButton.classList.add('disabled');;
+    _startButton.classList.add('disabled');
+    _stopButton.classList.remove('disabled');
 
     _startTime = Date.now();
 
@@ -51,13 +53,14 @@
     _interval = setInterval(function () {
       _timerElem.innerText = formatTimer(_duration - (Date.now() - _startTime));
       if (_startTime + _duration < Date.now()) {
-        resetTimer();
+        finishTimer();
       }
     }, 500);
   }
 
-  function resetTimer() {
+  function finishTimer() {
     _startButton.classList.remove('disabled');
+    _stopButton.classList.add('disabled');
 
     if (_interval !== null) {
       clearInterval(_interval);
@@ -73,6 +76,7 @@
 
   function stopTimer() {
     _startButton.classList.remove('disabled');
+    _stopButton.classList.add('disabled');
 
     if (_interval !== null) {
       clearInterval(_interval);
@@ -80,6 +84,10 @@
     }
 
     _duration = _duration - (Date.now() - _startTime);
+  }
+
+  function resetTimer() {
+    setPhase(getCurrentPhase());
   }
 
   function lockFocusField() {
@@ -159,27 +167,33 @@
       stopTimer();
     });
 
+    _resetButton.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      finishTimer();
+      resetTimer();
+    });
+
     _focusTextInputElem.oninput = function (evt) {
       validateFocusText();
     };
 
     document.getElementById('pomodoro').addEventListener('click', function () {
       setPhase('POMODORO');
-      resetTimer();
+      finishTimer();
       document.querySelector('#phase-container .active').classList.remove('active');
       document.querySelector('#phase-container #pomodoro').classList.add('active');
     });
 
     document.getElementById('short-break').addEventListener('click', function () {
       setPhase('SHORT_BREAK');
-      resetTimer();
+      finishTimer();
       document.querySelector('#phase-container .active').classList.remove('active');
       document.querySelector('#phase-container #short-break').classList.add('active');
     });
 
     document.getElementById('long-break').addEventListener('click', function () {
       setPhase('LONG_BREAK');
-      resetTimer();
+      finishTimer();
       document.querySelector('#phase-container .active').classList.remove('active');
       document.querySelector('#phase-container #long-break').classList.add('active');
     });
