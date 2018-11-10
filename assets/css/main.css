@@ -1646,3 +1646,15 @@ input, select, textarea {
 			margin: 0 auto 1rem auto;
 			font-size: 3rem;
 		}
+
+		ul.actions {
+			justify-content: center;
+		}
+
+		#focus-text-input-validation-error {
+			padding-top: 1rem;
+		}
+
+		form > .fields {
+			margin-bottom: 0;
+		}
