@@ -51,7 +51,9 @@
     }
 
     _interval = setInterval(function () {
-      _timerElem.innerText = formatTimer(_duration - (Date.now() - _startTime));
+      var timerText = formatTimer(_duration - (Date.now() - _startTime));
+      document.title = timerText + ' - Give me focus';
+      _timerElem.innerText = timerText;
       if (_startTime + _duration < Date.now()) {
         finishTimer();
       }
@@ -61,6 +63,7 @@
   function finishTimer() {
     _startButton.classList.remove('disabled');
     _stopButton.classList.add('disabled');
+    document.title = 'Give me focus - simple pomodoro app';
 
     if (_interval !== null) {
       clearInterval(_interval);
@@ -77,6 +80,7 @@
   function stopTimer() {
     _startButton.classList.remove('disabled');
     _stopButton.classList.add('disabled');
+    document.title = 'Give me focus - simple pomodoro app';
 
     if (_interval !== null) {
       clearInterval(_interval);
