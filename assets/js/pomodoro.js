@@ -22,13 +22,15 @@
     'LONG_BREAK'
   ];
 
+  var _duration = null;
   var _startTime = null;
   var _interval = null;
   var _timerElem = document.getElementById('timer');
   var _focusTextInputElem = document.getElementById('focus-text-input');
   var _focusTextValidationErrorElem = document.getElementById('focus-text-input-validation-error');
   var _focusTextElem = document.getElementById('focus-text');
-  var _startPomodoroButton = document.getElementById('start-pomodoro');
+  var _startButton = document.getElementById('start');
+  var _stopButton = document.getElementById('stop');
 
   function formatTimer(milliseconds) {
     var remainingSeconds = Math.round(milliseconds / 1000);
@@ -38,7 +40,7 @@
   }
 
   function startTimer() {
-    _startPomodoroButton.classList.add('disabled');;
+    _startButton.classList.add('disabled');;
 
     _startTime = Date.now();
 
@@ -47,16 +49,16 @@
     }
 
     _interval = setInterval(function () {
-      var duration = PHASE_DURATIONS[getCurrentPhase()];
-      _timerElem.innerText = formatTimer(duration - (Date.now() - _startTime));
-      if (_startTime + duration < Date.now()) {
+      _timerElem.innerText = formatTimer(_duration - (Date.now() - _startTime));
+      if (_startTime + _duration < Date.now()) {
         resetTimer();
       }
     }, 500);
   }
 
   function resetTimer() {
-    _startPomodoroButton.classList.remove('disabled');
+    _startButton.classList.remove('disabled');
+
     if (_interval !== null) {
       clearInterval(_interval);
       _interval = null;
@@ -67,6 +69,17 @@
     }
 
     formatTimer(0);
+  }
+
+  function stopTimer() {
+    _startButton.classList.remove('disabled');
+
+    if (_interval !== null) {
+      clearInterval(_interval);
+      _interval = null;
+    }
+
+    _duration = _duration - (Date.now() - _startTime);
   }
 
   function lockFocusField() {
@@ -99,8 +112,8 @@
 
     // TODO rotate next occurence of phases - not first
     currentPhaseIndex = PHASE_ROTATION.indexOf(newPhase);
-    var duration = PHASE_DURATIONS[getCurrentPhase()];
-    _timerElem.innerText = formatTimer(duration);
+    _duration = PHASE_DURATIONS[getCurrentPhase()];
+    _timerElem.innerText = formatTimer(_duration);
 
     switch (getCurrentPhase()) {
       case 'POMODORO':
@@ -115,24 +128,22 @@
     }
   }
 
-
   function validateFocusText() {
     var text = _focusTextInputElem.value.trim();
     if (text) {
       _focusTextValidationErrorElem.style.visibility = 'hidden';
-      _startPomodoroButton.classList.remove('disabled');
+      _startButton.classList.remove('disabled');
       return true;
     } else {
-      _startPomodoroButton.classList.add('disabled');
+      _startButton.classList.add('disabled');
       _focusTextValidationErrorElem.style.visibility = 'visible';
       return false;
     }
   }
 
   function init() {
-    var duration = PHASE_DURATIONS[getCurrentPhase()];
-    _timerElem.innerText = formatTimer(duration);
-    _startPomodoroButton.addEventListener('click', function (evt) {
+
+    _startButton.addEventListener('click', function (evt) {
       evt.preventDefault();
       if (getCurrentPhase() === 'POMODORO') {
         if (validateFocusText()) {
@@ -142,6 +153,12 @@
         startTimer();
       }
     });
+
+    _stopButton.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      stopTimer();
+    });
+
     _focusTextInputElem.oninput = function (evt) {
       validateFocusText();
     };
@@ -167,7 +184,10 @@
       document.querySelector('#phase-container #long-break').classList.add('active');
     });
 
+    setPhase('POMODORO');
+
   }
 
   init();
+
 })();
