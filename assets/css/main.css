@@ -1191,7 +1191,7 @@ input, select, textarea {
 		@media screen and (max-width: 1680px) {
 
 			#wrapper {
-				padding: 3rem 2rem;
+				padding: 2rem 1rem;
 			}
 
 		}
@@ -1637,13 +1637,14 @@ input, select, textarea {
 			opacity: 0;
 		}
 
-		/* Customer additions */
+		/* Custom additions */
+
 		a.active {
 			background-color: rgba(255, 255, 255, 0.075);
 		}
 
 		#timer {
-			margin: 0 auto 1rem auto;
+			margin: 0 auto 2.5rem auto;
 			font-size: 3rem;
 		}
 
@@ -1653,8 +1654,13 @@ input, select, textarea {
 
 		#focus-text-input-validation-error {
 			padding-top: 1rem;
+			margin-bottom: 1rem;
 		}
 
 		form > .fields {
 			margin-bottom: 0;
+		}
+
+		#focus-text-container {
+			padding-top: 0;
 		}

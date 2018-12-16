@@ -36,7 +36,9 @@
   function formatTimer(milliseconds) {
     var remainingSeconds = Math.round(milliseconds / 1000);
     var minutes = Math.floor(remainingSeconds / 60);
+    if (minutes < 0) minutes = 0;
     var seconds = remainingSeconds - minutes * 60;
+    if (seconds < 0) seconds = 0;
     return (minutes < 10 ? '0' : '') + minutes + ' : ' + (seconds < 10 ? '0' : '') + seconds;
   }
 
@@ -57,7 +59,7 @@
       if (_startTime + _duration < Date.now()) {
         finishTimer();
       }
-    }, 500);
+    }, 1000);
   }
 
   function finishTimer() {
